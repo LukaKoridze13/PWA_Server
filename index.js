@@ -8,12 +8,14 @@ const port = process.env.PORT || 5555;
 app.use(express.json());
 app.use(cors());
 
+// Your VAPID keys (public and private)
 const vapidPublicKey =
   "BFiGN-1ixongQ4YVFGJP-lvnjs8Jpmfo8IzPtXOA_mVpx5xBjZvGLoL_TSALkai3dlh2zZNgAOHZoYfC0Ktad54";
 const vapidPrivateKey = "amUunF4xa8bpKBPBRPeCJJRmGJ_9e8ql8BJYJ1K4yPs";
 
+// Set VAPID details
 webPush.setVapidDetails(
-  "mailto:lukakoridze13@gmail.com", // Use the correct URL here
+  "mailto:lukakoridze13@gmail.com",
   vapidPublicKey,
   vapidPrivateKey
 );
