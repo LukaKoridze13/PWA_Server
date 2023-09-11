@@ -1,48 +1,54 @@
 import express from "express";
-import webPush from "web-push";
+import bodyParser from "body-parser";
+import webpush from "web-push";
 import cors from "cors";
 
 const app = express();
-const port = process.env.PORT || 5555;
 
-app.use(express.json());
+app.use(bodyParser.json());
 app.use(cors());
 
-// Set the keys used for encrypting the push messages.
-webPush.setVapidDetails(
-  "https://pwa-27vm.onrender.com",
-  process.env.VAPID_PUBLIC_KEY,
-  process.env.VAPID_PRIVATE_KEY
+// Replace with your own VAPID keys (generate them)
+const VAPID_PUBLIC_KEY =
+  "BOFWDAaOvqQ1cBTxg_IwQ1cRNJ5Z3QouAiIgzo4JRJXdw_CnlrSPJRxaeiIlfH23-VERIKuhKzJXi49ERjykQ3E";
+const VAPID_PRIVATE_KEY = "ezKVxMcXuXwNZ-_x2el9AinOfV0I3OSJ8lj37_3Oh8U";
+
+webpush.setVapidDetails(
+  "mailto:lukakoridze13@gmail.com",
+  VAPID_PUBLIC_KEY,
+  VAPID_PRIVATE_KEY
 );
 
-app.get("/", (req, res) => {
-  res.send("Server");
+// Store subscribed clients (for simplicity, use an array)
+const subscribers = [];
+
+// Route to subscribe a new client
+app.post("/subscribe", (req, res) => {
+  const subscription = req.body;
+  subscribers.push(subscription);
+  res.status(201).json({});
+  console.log(subscribers);
+
 });
 
-app.post("/register", (req, res) => {
-  res.sendStatus(201);
+// Route to send a push notification to all subscribed clients
+app.post("/send-notification", (req, res) => {
+  const message = req.body.message;
+
+  // Iterate through subscribers and send the push notification
+  subscribers.forEach((subscription) => {
+    webpush
+      .sendNotification(
+        subscription,
+        JSON.stringify({ title: "Web Push Notification", body: message })
+      )
+      .catch((err) => console.error(err));
+  });
+
+  res.status(200).json({ message: "Notification sent" });
 });
 
-app.post("/sendNotification", (req, res) => {
-  const subscription = req.body.subscription;
-  const payload = JSON.stringify(req.body.payload);
-  const options = {
-    TTL: req.body.ttl,
-  };
-
-  setTimeout(() => {
-    webPush
-      .sendNotification(subscription, payload, options)
-      .then(() => {
-        res.sendStatus(201);
-      })
-      .catch((error) => {
-        console.error(error);
-        res.sendStatus(500);
-      });
-  }, req.body.delay * 1000);
-});
-
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });

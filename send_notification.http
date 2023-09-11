@@ -1,0 +1,6 @@
+POST http://localhost:3000/send-notification
+Content-Type: application/json
+
+{
+  "message": "This is a test push notification message."
+}
