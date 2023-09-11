@@ -8,16 +8,19 @@ const port = process.env.PORT || 5555;
 app.use(express.json());
 app.use(cors());
 
-// Your VAPID keys (public and private)
-const vapidPublicKey =
-  "BGYuPZo_oTJ5Ze-tboy4wgN9_mZNEaC7lpARAil3qP2RcFOKflkxr3Y2fB39s5LACtUgUOAVRO4LldZp_d9m2xA";
-const vapidPrivateKey = "BK8-dnfyXZv9_tSt97PfoNTd6m_0j4P397PsbMq4R0s";
-
-// Set VAPID details
+if (!process.env.VAPID_PUBLIC_KEY || !process.env.VAPID_PRIVATE_KEY) {
+  console.log(
+    "You must set the VAPID_PUBLIC_KEY and VAPID_PRIVATE_KEY " +
+      "environment variables. You can use the following ones:"
+  );
+  console.log(webPush.generateVAPIDKeys());
+  return;
+}
+// Set the keys used for encrypting the push messages.
 webPush.setVapidDetails(
-  "mailto:lukakoridze13@gmail.com",
-  vapidPublicKey,
-  vapidPrivateKey
+  "https://example.com/",
+  process.env.VAPID_PUBLIC_KEY,
+  process.env.VAPID_PRIVATE_KEY
 );
 
 app.get("/", (req, res) => {
