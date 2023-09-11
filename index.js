@@ -10,8 +10,8 @@ app.use(cors());
 
 // Your VAPID keys (public and private)
 const vapidPublicKey =
-  "BFiGN-1ixongQ4YVFGJP-lvnjs8Jpmfo8IzPtXOA_mVpx5xBjZvGLoL_TSALkai3dlh2zZNgAOHZoYfC0Ktad54";
-const vapidPrivateKey = "amUunF4xa8bpKBPBRPeCJJRmGJ_9e8ql8BJYJ1K4yPs";
+  "BGYuPZo_oTJ5Ze-tboy4wgN9_mZNEaC7lpARAil3qP2RcFOKflkxr3Y2fB39s5LACtUgUOAVRO4LldZp_d9m2xA";
+const vapidPrivateKey = "BK8-dnfyXZv9_tSt97PfoNTd6m_0j4P397PsbMq4R0s";
 
 // Set VAPID details
 webPush.setVapidDetails(
